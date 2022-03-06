@@ -4,6 +4,7 @@ using EquipAppLib.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pomelo.EntityFrameworkCore.MySql;
 
 namespace EquipAppWPF.Data
 {
@@ -11,10 +12,11 @@ namespace EquipAppWPF.Data
     {
         public static IServiceCollection AddDataBase(this IServiceCollection Service, IConfiguration Configuration)
         {
+            var type = Configuration["Type"];
+            var cString = Configuration.GetConnectionString(type);
             return Service.AddDbContext<EquipAppDb>(
                 Opt =>
                 {
-                    var type = Configuration["Type"];
                     switch (type)
                     {
                         case null: throw new InvalidOperationException("Не определен тип Базы данных!");
@@ -22,13 +24,13 @@ namespace EquipAppWPF.Data
                         default: throw new InvalidOperationException("Неподдерживаемый тип Базы данных!");
 
                         case "MSSQL":
-                            Opt.UseSqlServer(Configuration.GetConnectionString(type));
+                            Opt.UseSqlServer(cString);
                             break;
                         case "MySQL":
-                            Opt.UseMySQL(Configuration.GetConnectionString(type));
+                            Opt.UseMySql(cString, ServerVersion.AutoDetect(cString));
                             break;
                     }
-                }).AddRepositoriesInDb();
+                }).AddTransient<DbInitializer>().AddRepositoriesInDb();
         }
     }
 }

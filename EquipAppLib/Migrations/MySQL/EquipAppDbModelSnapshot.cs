@@ -4,18 +4,16 @@ using EquipAppLib.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace EquipAppLib.Migrations
+namespace EquipAppLib.Migrations.MySQL
 {
     [DbContext(typeof(EquipAppDb))]
-    [Migration("20220304180409_initial")]
-    partial class initial
+    partial class EquipAppDbModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
